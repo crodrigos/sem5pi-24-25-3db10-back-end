@@ -1,0 +1,17 @@
+﻿@startuml
+actor Cliente
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+participant "IStaffRepository" as Repository
+participant "Staff" as StaffEntity
+
+Cliente -> Controller: POST /api/staff
+Controller -> Controller: if (createStaffDto == null)
+Controller --> Cliente: 400 BadRequest("Staff data must not be null.")
+Controller -> Service: CreateStaffAsync(createStaffDto)
+Service -> StaffEntity: new Staff(...)
+Service -> Repository: Add(staffEntity)
+Repository --> Service: void
+Service --> Controller: StaffDto
+Controller --> Cliente: 201 Created (StaffDto)
+@enduml

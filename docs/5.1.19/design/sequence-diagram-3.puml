@@ -1,0 +1,22 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "OperationRequestRepository" as ORR
+participant "ApplicationDbContext" as DbContext
+
+Doctor -> ORC : ListOperationRequests(searchCriteria)
+ORC -> ORS : ListOperationRequests(searchCriteria)
+ORS -> ORR : GetRequestsByCriteria(searchCriteria)
+ORR -> DbContext : FindRequestsByCriteria(searchCriteria)
+DbContext --> ORR : List<OperationRequest>
+ORR --> ORS : List<OperationRequest>
+
+alt Requests found
+    ORS --> ORC : List<OperationRequest>
+    ORC --> Doctor : Display(List<OperationRequest>)
+else No requests found
+    ORS --> ORC : EmptyResult
+    ORC --> Doctor : Display("No operation requisitions found")
+end
+@enduml

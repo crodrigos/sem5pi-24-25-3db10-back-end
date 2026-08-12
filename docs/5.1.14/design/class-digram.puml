@@ -1,0 +1,302 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+package "Application Layer" {
+
+    class StaffController <<Controller>> {
+        - svc : StaffService
+        + CreateStaff([FromBody] CreateStaffDto createStaffDto) : void
+        + SearchStaffByCriteria([FromQuery] StaffCriteria criteria) : void
+        + UpdateStaff(string licenseNumber, [FromBody] StaffCriteria criteria) : void
+        + ConfirmStaffDelete(string licenseNumber, [FromQuery] bool confirm) : void
+        + DeleteStaff(string licenseNumber) : void
+    }
+
+    class StaffService <<Service>> {
+        - IEmailService _emailService
+        - ILicenseNumberGenerator _licenseNumberGenerator
+        - ILogService<Staff> _staffLogService
+        - IStaffRepository _staffRepository
+        
+        + CreateStaffAsync(CreateStaffDto createStaffDto) : Task<Staff>
+        + SearchStaffByFiltersAsync(StaffCriteria criteria) : Task<IEnumerable<Staff>>
+        + UpdateStaffData(StaffCriteria staffCriteria, string licenseNumber) : Task<Staff>
+        + ValidateStaffForDeletion(string licenseNumber) : bool
+        + MarkStaffForDeletion(string licenseNumber) : Task
+        + GetAllAsync() : Task<IEnumerable<Staff>>
+        + GetStaffByLicenseNumberAsync(string licenseNumber) : Task<Staff>
+        + ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct : TEnum
+        + CreateContactInfo(ContactInfoDto contactInfoDto) : ContactInfo
+        + NotifyStaffIfContactUpdated(Staff staff, StaffCriteria criteria) : void
+        + UpdateStaffInRepository(Staff staff) : Task
+    }
+
+    class EmailService <<Service>> {
+        - string _fromAddress
+        - ISmtpClientWrapper _smtpClientWrapper
+        + NotifyClientAboutUpdate(EmailAddress contactInformationString) : void
+    }
+
+    class LicenseNumberGenerator <<Service>> {
+        - Random _random
+        + GenerateLicenseNumber(UserRole userRole) : LicenseNumber
+    }
+
+    class LogService <<Service>> {
+        + LogActionAsync(string action, T entity) : Task
+    }
+
+}
+
+package "Domain Layer" {
+
+    class Staff <<AggregateRoot, Entity>> {
+        - FirstName : Name
+        - LastName : Name
+        - FullName : Name
+        - LicenseNumber : LicenseNumber
+        - Specialization : Specialization
+        - ContactInfo : ContactInfo
+        - DeletionStatus : DeletionStatus
+        + Staff(firstName : Name, lastName : Name, licenseNumber : LicenseNumber, specialization : Specialization, contactInfo : ContactInfo)
+    }
+
+    class Name <<ValueObject>> {
+        - _value : String
+        + Name(string value)
+        + Create(string value) : Name
+    }
+
+    class LicenseNumber <<ValueObject>> {
+        - _value : String
+        + LicenseNumber(string value)
+    }
+
+    enum Specialization <<Enumeration>> {
+        Cardiology
+        Dermatology
+        Pediatrics
+        Neurology
+        Oncology
+        Radiology
+        Surgery
+        Orthopedics
+        Psychiatry
+    }
+
+    class ContactInfo <<ValueObject>> {
+        - PhoneNumber : PhoneNumber
+        - EmailAddress : EmailAddress
+        + ContactInfo(PhoneNumber phoneNumber, EmailAddress emailAddress)
+        + Create(ContactInfoDto contactInfoDto) : ContactInfo
+    }
+
+    class PhoneNumber <<ValueObject>> {
+        - _number : String
+        + PhoneNumber(string number)
+        + Create(string number) : PhoneNumber
+    }
+
+    class EmailAddress <<ValueObject>> {
+        - _localPart : String
+        - _domain : String
+        + EmailAddress(string email)
+        + Create(string email) : EmailAddress
+    }
+
+    class DeletionStatus <<ValueObject>> {
+        - IsToDelete : Bool
+        + DeletionDate : DateTime
+    }
+
+}
+
+package "Persistence Layer" {
+
+    interface IStaffRepository <<Repository>> {
+        + AddStaffAsync(Staff staff) : Task
+        + GetByLicenseNumberAsync(LicenseNumber licenseNumber) : Task<Staff>
+        + SearchStaffByFiltersAsync(StaffCriteria criteria) : Task<IEnumerable<Staff>>
+        + UpdateStaffDataAsync(Staff staff) : Task
+        + GetLicenseNumberByEmailAddressAsync(EmailAddress userEmail) : Task<LicenseNumber>
+        + GetStaffMarkedForDeletionAsync() : Task<IEnumerable<Staff>>
+        + RemoveStaffAsync(Staff staff) : Task
+        + ApplyFullNameFilter(IQueryable<Staff> query, string name) : IQueryable<Staff>
+        + ApplyFirstNameFilter(IQueryable<Staff> query, string? firstName) : IQueryable<Staff>
+        + ApplyLastNameFilter(IQueryable<Staff> query, string? lastName) : IQueryable<Staff>
+        + ApplyEmailFilter(IQueryable<Staff> query, string email) : IQueryable<Staff>
+        + ApplyPhoneNumberFilter(IQueryable<Staff> query, string phoneNumber) : IQueryable<Staff>
+        + ApplyLicenseNumberFilter(IQueryable<Staff> query, string licenseNumber) : IQueryable<Staff>
+        + ApplySpecializationFilter(IQueryable<Staff> query, string specialization) : IQueryable<Staff>
+    }
+
+}
+
+' Relationships and dependencies
+StaffController --> StaffService
+StaffService --> IStaffRepository
+StaffService --> EmailService
+StaffService --> LicenseNumberGenerator
+StaffService --> LogService
+
+Staff --> Name
+Staff --> LicenseNumber
+Staff --> Specialization
+Staff --> ContactInfo
+Staff --> DeletionStatus
+
+ContactInfo --> PhoneNumber
+ContactInfo --> EmailAddress
+
+@enduml
+@startuml
+'https://plantuml.com/class-diagram
+
+package "Application Layer" {
+
+    class StaffController <<Controller>> {
+        - svc : StaffService
+        + CreateStaff([FromBody] CreateStaffDto createStaffDto) : void
+        + SearchStaffByCriteria([FromQuery] StaffCriteria criteria) : void
+        + UpdateStaff(string licenseNumber, [FromBody] StaffCriteria criteria) : void
+        + ConfirmStaffDelete(string licenseNumber, [FromQuery] bool confirm) : void
+        + DeleteStaff(string licenseNumber) : void
+    }
+
+    class StaffService <<Service>> {
+        - IEmailService _emailService
+        - ILicenseNumberGenerator _licenseNumberGenerator
+        - ILogService<Staff> _staffLogService
+        - IStaffRepository _staffRepository
+        
+        + CreateStaffAsync(CreateStaffDto createStaffDto) : Task<Staff>
+        + SearchStaffByFiltersAsync(StaffCriteria criteria) : Task<IEnumerable<Staff>>
+        + UpdateStaffData(StaffCriteria staffCriteria, string licenseNumber) : Task<Staff>
+        + ValidateStaffForDeletion(string licenseNumber) : bool
+        + MarkStaffForDeletion(string licenseNumber) : Task
+        + GetAllAsync() : Task<IEnumerable<Staff>>
+        + GetStaffByLicenseNumberAsync(string licenseNumber) : Task<Staff>
+        + ParseEnum<TEnum>(string value, string errorMessage) where TEnum : struct : TEnum
+        + CreateContactInfo(ContactInfoDto contactInfoDto) : ContactInfo
+        + NotifyStaffIfContactUpdated(Staff staff, StaffCriteria criteria) : void
+        + UpdateStaffInRepository(Staff staff) : Task
+    }
+
+    class EmailService <<Service>> {
+        - string _fromAddress
+        - ISmtpClientWrapper _smtpClientWrapper
+        + NotifyClientAboutUpdate(EmailAddress contactInformationString) : void
+    }
+
+    class LicenseNumberGenerator <<Service>> {
+        - Random _random
+        + GenerateLicenseNumber(UserRole userRole) : LicenseNumber
+    }
+
+    class LogService <<Service>> {
+        + LogActionAsync(string action, T entity) : Task
+    }
+
+}
+
+package "Domain Layer" {
+
+    class Staff <<AggregateRoot, Entity>> {
+        - FirstName : Name
+        - LastName : Name
+        - FullName : Name
+        - LicenseNumber : LicenseNumber
+        - Specialization : Specialization
+        - ContactInfo : ContactInfo
+        - DeletionStatus : DeletionStatus
+        + Staff(firstName : Name, lastName : Name, licenseNumber : LicenseNumber, specialization : Specialization, contactInfo : ContactInfo)
+    }
+
+    class Name <<ValueObject>> {
+        - _value : String
+        + Name(string value)
+        + Create(string value) : Name
+    }
+
+    class LicenseNumber <<ValueObject>> {
+        - _value : String
+        + LicenseNumber(string value)
+    }
+
+    enum Specialization <<Enumeration>> {
+        Cardiology
+        Dermatology
+        Pediatrics
+        Neurology
+        Oncology
+        Radiology
+        Surgery
+        Orthopedics
+        Psychiatry
+    }
+
+    class ContactInfo <<ValueObject>> {
+        - PhoneNumber : PhoneNumber
+        - EmailAddress : EmailAddress
+        + ContactInfo(PhoneNumber phoneNumber, EmailAddress emailAddress)
+        + Create(ContactInfoDto contactInfoDto) : ContactInfo
+    }
+
+    class PhoneNumber <<ValueObject>> {
+        - _number : String
+        + PhoneNumber(string number)
+        + Create(string number) : PhoneNumber
+    }
+
+    class EmailAddress <<ValueObject>> {
+        - _localPart : String
+        - _domain : String
+        + EmailAddress(string email)
+        + Create(string email) : EmailAddress
+    }
+
+    class DeletionStatus <<ValueObject>> {
+        - IsToDelete : Bool
+        + DeletionDate : DateTime
+    }
+
+}
+
+package "Persistence Layer" {
+
+    interface IStaffRepository <<Repository>> {
+        + AddStaffAsync(Staff staff) : Task
+        + GetByLicenseNumberAsync(LicenseNumber licenseNumber) : Task<Staff>
+        + SearchStaffByFiltersAsync(StaffCriteria criteria) : Task<IEnumerable<Staff>>
+        + UpdateStaffDataAsync(Staff staff) : Task
+        + GetLicenseNumberByEmailAddressAsync(EmailAddress userEmail) : Task<LicenseNumber>
+        + GetStaffMarkedForDeletionAsync() : Task<IEnumerable<Staff>>
+        + RemoveStaffAsync(Staff staff) : Task
+        + ApplyFullNameFilter(IQueryable<Staff> query, string name) : IQueryable<Staff>
+        + ApplyFirstNameFilter(IQueryable<Staff> query, string? firstName) : IQueryable<Staff>
+        + ApplyLastNameFilter(IQueryable<Staff> query, string? lastName) : IQueryable<Staff>
+        + ApplyEmailFilter(IQueryable<Staff> query, string email) : IQueryable<Staff>
+        + ApplyPhoneNumberFilter(IQueryable<Staff> query, string phoneNumber) : IQueryable<Staff>
+        + ApplyLicenseNumberFilter(IQueryable<Staff> query, string licenseNumber) : IQueryable<Staff>
+        + ApplySpecializationFilter(IQueryable<Staff> query, string specialization) : IQueryable<Staff>
+    }
+
+}
+
+' Relationships and dependencies
+StaffController --> StaffService
+StaffService --> IStaffRepository
+StaffService --> EmailService
+StaffService --> LicenseNumberGenerator
+StaffService --> LogService
+
+Staff --> Name
+Staff --> LicenseNumber
+Staff --> Specialization
+Staff --> ContactInfo
+Staff --> DeletionStatus
+
+ContactInfo --> PhoneNumber
+ContactInfo --> EmailAddress
+
+@enduml

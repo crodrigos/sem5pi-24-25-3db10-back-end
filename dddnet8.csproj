@@ -1,0 +1,149 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <RootNamespace>dddnet8</RootNamespace>
+    <UseStaticWebAssets>true</UseStaticWebAssets>
+    <RuntimeIdentifiers>linux-x64;win-x64;osx-x64</RuntimeIdentifiers>
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+    <PublishProfileRootFolder>$(MSBuildProjectDirectory)\sem5pi-24-25-3db10-back-end\Properties\PublishProfiles</PublishProfileRootFolder>
+    <PublishProfile>github</PublishProfile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Domain\Categories\**" />
+    <Compile Remove="Domain\Families\**" />
+    <Compile Remove="Domain\Products\**" />
+    <Compile Remove="Infraestructure\Products\**" />
+    <Compile Remove="Controllers\CategoriesController.cs" />
+    <Compile Remove="Controllers\FamiliesController.cs" />
+    <Compile Remove="Controllers\ProductsController.cs" />
+    <Compile Remove="Infraestructure\Categories\**" />
+    <Compile Remove="Infraestructure\Families\**" />
+    <Compile Remove="Infraestructure\Staff.cs" />
+    <Compile Remove="Domain\SystemUsers\Username.cs" />
+    <Compile Remove="Domain\OperationType\Name.cs" />
+    <Compile Remove="Domain\SystemUsers\Converter\UserNameConverter.cs" />
+    <Compile Remove="test\Domain\Patients\**" />
+    <Compile Remove="test\bin\**" />
+    <Compile Remove="test\obj\**" />
+    <Compile Remove="Domain\Authentication\Security\Password\PasswordException.cs" />
+    <Compile Remove="Migrations\20241023202430_NomeDaNovaMigracao.cs" />
+    <Compile Remove="Migrations\20241023202430_NomeDaNovaMigracao.Designer.cs" />
+    <Compile Remove="Migrations\20241025144850_project.cs" />
+    <Compile Remove="Migrations\20241025144850_project.Designer.cs" />
+    <Compile Remove="Migrations\20241025145254_project.cs" />
+    <Compile Remove="Migrations\20241025145254_project.Designer.cs" />
+    <Compile Remove="Migrations\20241025145407_project.cs" />
+    <Compile Remove="Migrations\20241025145407_project.Designer.cs" />
+    <Compile Remove="Migrations\20241025145455_project.cs" />
+    <Compile Remove="Migrations\20241025145455_project.Designer.cs" />
+    <Compile Remove="Migrations\20241025150026_project.cs" />
+    <Compile Remove="Migrations\20241025150026_project.Designer.cs" />
+    <Compile Remove="Migrations\20241022110639_updateMigrationspt2.cs" />
+    <Compile Remove="Migrations\20241022110639_updateMigrationspt2.Designer.cs" />
+    <Compile Remove="Migrations\20241023075655_updateMigrationspt3.cs" />
+    <Compile Remove="Migrations\20241023075655_updateMigrationspt3.Designer.cs" />
+    <Compile Remove="Migrations\20241024230516_NomeDaNovaMigracao3.cs" />
+    <Compile Remove="Migrations\20241024230516_NomeDaNovaMigracao3.Designer.cs" />
+    <Compile Remove="Migrations\20241025125644_NomeDaNovaMigracao4.cs" />
+    <Compile Remove="Migrations\20241025125644_NomeDaNovaMigracao4.Designer.cs" />
+    <Compile Remove="Migrations\20241025132219_NomeDaNovaMigracao5.cs" />
+    <Compile Remove="Migrations\20241025132219_NomeDaNovaMigracao5.Designer.cs" />
+    <Compile Remove="Migrations\20241025143936_NomeDaNovaMigracao6.cs" />
+    <Compile Remove="Migrations\20241025143936_NomeDaNovaMigracao6.Designer.cs" />
+    <Compile Remove="Migrations\20241025144625_NomeDaNovaMigracao2.cs" />
+    <Compile Remove="Migrations\20241025144625_NomeDaNovaMigracao2.Designer.cs" />
+    <Compile Remove="Migrations\20241025150209_InitialCreate.cs" />
+    <Compile Remove="Migrations\20241025150209_InitialCreate.Designer.cs" />
+    <Compile Remove="Controllers\GoogleController.cs" />
+    <Compile Remove="Controllers\GooglesController.cs" />
+    <Compile Remove="Domain\Planning\DTOs\PlanningAllDataForScheduling\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Domain\Categories\**" />
+    <EmbeddedResource Remove="Domain\Families\**" />
+    <EmbeddedResource Remove="Domain\Products\**" />
+    <EmbeddedResource Remove="Infraestructure\Products\**" />
+    <EmbeddedResource Remove="Infraestructure\Categories\**" />
+    <EmbeddedResource Remove="Infraestructure\Families\**" />
+    <EmbeddedResource Remove="test\Domain\Patients\**" />
+    <EmbeddedResource Remove="test\bin\**" />
+    <EmbeddedResource Remove="test\obj\**" />
+    <EmbeddedResource Remove="Domain\Planning\DTOs\PlanningAllDataForScheduling\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Domain\Categories\**" />
+    <Content Remove="Domain\Families\**" />
+    <Content Remove="Domain\Products\**" />
+    <Content Remove="Infraestructure\Products\**" />
+    <Content Remove="Infraestructure\Categories\**" />
+    <Content Remove="Infraestructure\Families\**" />
+    <Content Remove="test\Domain\Patients\**" />
+    <Content Remove="test\bin\**" />
+    <Content Remove="test\obj\**" />
+    <Content Remove="Domain\Planning\DTOs\PlanningAllDataForScheduling\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Domain\Categories\**" />
+    <None Remove="Domain\Families\**" />
+    <None Remove="Domain\Products\**" />
+    <None Remove="Infraestructure\Products\**" />
+    <None Remove="Infraestructure\Categories\**" />
+    <None Remove="Infraestructure\Families\**" />
+    <None Remove="test\Domain\Patients\**" />
+    <None Remove="test\bin\**" />
+    <None Remove="test\obj\**" />
+    <None Remove="PlanningModule\server\Server.pl" />
+    <None Remove="Domain\Planning\DTOs\PlanningAllDataForScheduling\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\appsettings.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\dddnet8.deps.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\dddnet8.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\test.deps.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\test.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\bin\Debug\net8.0\test\obj\test.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="test\obj\Debug\net8.0\test.sourcelink.json" />
+    <_ContentIncludedByDefault Remove="test\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="test\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="test\obj\test.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infraestructure\UtilsBootstrapper\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="test\Infrastructure\OperationRequests\" />
+  </ItemGroup>
+
+</Project>

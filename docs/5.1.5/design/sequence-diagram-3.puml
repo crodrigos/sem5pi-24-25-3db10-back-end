@@ -1,0 +1,26 @@
+﻿@startuml
+actor Admin
+participant "UserController" as UC
+participant "ISystemUserService" as SUS
+participant "SystemUserRepository" as SUR
+participant "ApplicationDbContext" as DbContext
+
+Admin -> UC : DeleteUser(username)
+UC -> SUS : DeleteUser(username)
+SUS -> SUR : GetUserByUsernameAsync(username)
+SUR -> DbContext : FirstOrDefaultAsync(u => u.Username.Equals(username))
+DbContext --> SUR : SystemUser
+SUR --> SUS : SystemUser
+
+alt User found
+    SUS -> SUR : DeleteUserAsync(user)
+    SUR -> DbContext : Remove(user)
+    DbContext -> DbContext : SaveChangesAsync()
+    DbContext --> SUR : Confirmation
+    SUS --> UC : (true, "User deleted successfully")
+else User not found
+    SUS --> UC : (false, "User not found")
+end
+
+UC --> Admin : Ok(responseMessage)
+@enduml

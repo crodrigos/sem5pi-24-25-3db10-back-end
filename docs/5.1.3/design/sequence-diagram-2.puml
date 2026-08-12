@@ -1,0 +1,20 @@
+@startuml
+actor Patient
+participant "UserController" as UC
+participant "IPatientService" as PS
+participant "PatientRepository" as PR
+participant "IEmailService" as ES
+
+Patient -> UC : Register(dto)
+UC -> PS : Register(dto)
+PS -> PR : AddAsync(patient)
+PR --> PS : Confirmation
+
+alt Email validation required
+    PS -> ES : SendVerificationEmail(patient)
+    ES --> PS : Email sent confirmation
+end
+
+PS --> UC : Ok(responseMessage)
+UC --> Patient : Registration Successful
+@enduml

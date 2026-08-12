@@ -1,0 +1,10 @@
+﻿@startuml
+actor Client
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+
+Client -> Controller: DELETE /api/staff/{licenseNumber}
+Controller -> Service: MarkStaffForDeletion(licenseNumber)
+Service --> Controller: void
+Controller --> Client: 200 OK (Success Message)
+@enduml

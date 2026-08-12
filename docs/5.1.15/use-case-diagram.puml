@@ -1,0 +1,20 @@
+﻿@startuml
+actor Admin
+
+rectangle "Staff Management System" {
+    usecase "List Staff Profiles by Filters" as UC1
+}
+
+Admin --> UC1 : "Requests to list staff profiles"
+UC1 --> "Database" : "Retrieves profiles based on filters"
+
+note right of UC1
+  Preconditions:
+  - Admin is logged into the system.
+  - Admin has necessary permissions.
+
+  Postconditions:
+  - Admin receives a filtered list of staff profiles.
+end note
+
+@enduml

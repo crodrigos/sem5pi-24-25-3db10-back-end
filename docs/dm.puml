@@ -1,0 +1,127 @@
+@startuml
+
+hide empty attributes
+hide empty methods
+
+skinparam Class {
+    BackgroundColor #dce8e8
+}
+
+package users {
+
+    abstract class user as "User" {
+        - Username
+        - Email
+    }
+
+    class patient as "Patient" {
+        - First Name
+        - Last Name
+        - Full Name
+        - Date of Birth
+        - Gender
+        - {field} Medical Record Number (unique)
+        - {field} Phone Number (unique)
+        - {field} Allergies/Medical Conditions (opt.)
+        - Emergency Contact
+    }
+
+    class staff as "Medical Staff" {
+        - First Name
+        - Last Name
+        - Full Name
+        - {field} License Number (unique identifier)
+        - {field} Specialization (ex.: cardiology, orthopedics)
+        - {field} Phone Number
+        - {field} Avalabilty Slots
+    }
+
+    note left of staff::"Avalabilty Slots"
+        Ex.: 
+            slot 1: 2024-09-25:14h00-18h00;
+            slot 2: 2024-09-25:19h00/2024-09-26:02h00.
+    end note
+
+    class admin as "Admin" {}
+    
+    admin --> user
+}
+
+patient -> user
+staff --> user
+
+package operations {
+
+    class operationType as "Operation Type" {
+        - ID
+        - Name
+        - Required Staff By Specialization
+        - Estimated Duration
+    }
+
+    class operationRequest as "Operation Request" {
+        - ID
+        - Deadline Date
+        - Priority
+    }
+
+    note top  of operationRequest
+        Medical Staff associated with a 
+        Operation Request must be a doctor
+    end note
+
+}
+
+operationRequest "1..1" -- operationType
+operationRequest "N..1" -- staff
+operationRequest "N..1" ---- patient
+
+package scheduling as "Scheduling" {
+
+    class room as "Surgery Room" {
+        - Room Number
+        - Type 
+        - Capacity
+        - Assigned Equipment
+        - Current Status
+        - Maintenance Slots 
+    }
+
+    note right of room::Type 
+        Type: 
+            - operating room
+            - consultation room 
+            - ICU
+    end note
+
+    note right of room::"Current Status"
+        Current Status: 
+            - Available
+            - Occupied
+            - Under Maintenance
+    end note
+
+    class appointement as "Appointement" {
+        - ID
+        - Date and Time
+        - Status
+    }
+
+    appointement "1..1" -- room
+    appointement "1..1" -- operationRequest
+
+    note left of appointement::Status 
+        Status:
+            - Scheduled
+            - Completed
+            - Canceled
+    end note 
+
+}
+
+class slots as "Slot" {
+    - startingTime
+    - endTime
+}
+
+@enduml

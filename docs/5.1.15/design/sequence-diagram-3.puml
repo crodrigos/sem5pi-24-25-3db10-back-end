@@ -1,0 +1,33 @@
+﻿@startuml
+actor Client
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+participant "IStaffRepository" as Repository
+participant "Staff" as StaffEntity
+participant "Logger" as Logger
+
+Client -> Controller: GET /api/staff/search?criteria={filters}
+Controller -> Controller: Validate criteria
+alt if (criteria is invalid)
+    Controller --> Client: 400 BadRequest("Invalid search criteria.")
+else
+    Controller -> Service: SearchStaffByFilters(criteria)
+    activate Service
+
+    Service -> Logger: Log("Searching staff with filters...")
+    Service -> Repository: FindByFilters(criteria)
+    activate Repository
+
+    alt if (no staff found)
+        Repository --> Service: []
+        Service --> Controller: NotFound("No staff found matching the criteria.")
+    else
+        Repository --> Service: List<StaffEntity>
+        Service --> Controller: List<StaffDto>
+    end
+    deactivate Repository
+    deactivate Service
+end
+
+Controller --> Client: 200 OK (staff list)
+@enduml

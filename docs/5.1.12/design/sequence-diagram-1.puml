@@ -1,0 +1,10 @@
+﻿@startuml
+actor Cliente
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+
+Cliente -> Controller: POST /api/staff
+Controller -> Service: CreateStaffAsync(createStaffDto)
+Service --> Controller: StaffDto
+Controller --> Cliente: 201 Created (StaffDto)
+@enduml

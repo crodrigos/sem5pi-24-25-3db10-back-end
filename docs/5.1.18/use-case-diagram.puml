@@ -1,0 +1,18 @@
+@startuml
+actor Doctor
+actor Patient
+
+rectangle "Operation Requisition System" {
+    usecase "Remove Operation Request" as UC1
+    usecase "Validate Request Status" as UC2
+    usecase "Display Confirmation Prompt" as UC3
+    usecase "Log Removal" as UC4
+    usecase "Notify Planning Module" as UC5
+}
+
+Doctor --> UC1 : "Requests to remove operation requisition"
+UC1 --> UC2 : "Validates request status"
+UC1 --> UC3 : "Displays confirmation prompt"
+UC1 --> UC4 : "Logs removal in patient's record"
+UC1 --> UC5 : "Notifies Planning Module of removal"
+@enduml

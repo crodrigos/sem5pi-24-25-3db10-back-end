@@ -1,0 +1,14 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "OperationRequestRepository" as ORR
+
+
+Doctor -> ORC : ListOperationRequests(searchCriteria)
+ORC -> ORS : ListOperationRequests(searchCriteria)
+ORS -> ORR : GetRequestsByCriteria(searchCriteria)
+ORR --> ORS : List<OperationRequest>
+ORS --> ORC : List<OperationRequest>
+ORC --> Doctor : Display(List<OperationRequest>)
+@enduml

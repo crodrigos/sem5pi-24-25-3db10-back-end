@@ -1,0 +1,78 @@
+﻿@startuml
+'skinparam monochrome true
+'skinparam shadowing false
+
+'title Backoffice Module Use Case Diagram
+
+left to right direction
+
+skinparam {
+    BackgroundColor White
+}
+
+skinparam note {
+    BackgroundColor white
+    BorderColor #f2dd63
+}
+
+:Admin: as ADM
+:Backoffice User: as BU
+:Patient: as P
+:Doctor: as D
+
+(register new backoffice users) as UC1
+(reset password) as UC2
+(register a patient) as UC3
+(update user profile) as UC4
+(delete account) as UC5
+(user login) as UC6
+(patient IAM login) as UC7
+(create patient profile) as UC8
+(edit patient profile) as UC9
+(delete patient profile) as UC10
+(list/search patient profiles) as UC11
+(create staff profile) as UC12
+(edit staff profile) as UC13
+(deactivate staff profile) as UC14
+(list/search staff profiles) as UC15
+(request an operation) as UC16
+(update operation requisition) as UC17
+(remove operation requisition) as UC18
+(list/search operation requisitions) as UC19
+(add new operation types) as UC20
+(edit existing operation types) as UC21
+(remove obsolete operation types) as UC22
+(list/search operation types) as UC23
+
+note "No UC related to this actor yet" as NoUC
+
+ADM --> UC1
+ADM --> UC3
+ADM --> UC8
+ADM --> UC9
+ADM --> UC10
+ADM --> UC12
+ADM --> UC13
+ADM --> UC20
+ADM --> UC21
+ADM --> UC22
+ADM --> UC23
+ADM --> UC15
+ADM --> UC14
+
+
+BU --> UC6
+BU --> UC2
+
+P --> UC3
+P --> UC4
+P --> UC5
+P --> UC7
+P --> UC11
+
+D --> UC16
+D --> UC17
+D --> UC18
+D --> UC19
+
+@enduml

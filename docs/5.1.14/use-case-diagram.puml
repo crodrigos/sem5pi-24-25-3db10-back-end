@@ -1,0 +1,30 @@
+﻿@startuml
+actor Admin
+
+rectangle "Staff Management System" {
+    usecase "Deactivate Staff Profile" as UC1
+    usecase "Validate Deactivation Request" as UC2
+    usecase "Archive Staff Data" as UC3
+    usecase "Notify Deactivation" as UC4
+}
+
+Admin --> UC1 : "Requests to deactivate a staff profile"
+UC1 --> UC2 : "Validates deactivation request"
+UC2 --> UC3 : "If valid, archives staff data"
+UC3 --> UC4 : "Triggers notification"
+UC4 --> Admin : "Confirms profile deactivation"
+
+note right of UC1
+  Preconditions:
+  - Admin is logged into the system.
+  - Admin has necessary permissions.
+  - Staff profile exists and is currently active.
+
+  Postconditions:
+  - Staff profile is deactivated and archived.
+  - Historical data remains accessible.
+  - Admin receives confirmation of the deactivation.
+end note
+
+@enduml
+

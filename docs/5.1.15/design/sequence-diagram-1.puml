@@ -1,0 +1,10 @@
+﻿@startuml
+actor Client
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+
+Client -> Controller: GET /api/staff/search?criteria={filters}
+Controller -> Service: SearchStaffByFilters(criteria)
+Service --> Controller: List<StaffDto>
+Controller --> Client: 200 OK (staff list)
+@enduml

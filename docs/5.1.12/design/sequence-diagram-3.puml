@@ -1,0 +1,32 @@
+﻿@startuml
+actor Cliente
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+participant "IStaffRepository" as Repository
+participant "Staff" as StaffEntity
+participant "Logger" as Logger
+
+Cliente -> Controller: POST /api/staff
+Controller -> Controller: if (createStaffDto == null)
+Controller --> Cliente: 400 BadRequest("Staff data must not be null.")
+Controller -> Service: CreateStaffAsync(createStaffDto)
+activate Service
+
+Service -> Logger: Log("Creating new staff...")
+Service -> StaffEntity: new Staff(firstName, lastName, specialization, contactInfo, licenseNumber)
+Service -> Repository: Add(staffEntity)
+activate Repository
+
+Repository -> Repository: ValidateLicenseNumber(licenseNumber)
+alt if (license number exists)
+    Repository --> Service: ArgumentException("License number already exists.")
+    Service --> Controller: 400 BadRequest("License number already exists.")
+else
+    Repository --> Service: void
+end
+deactivate Repository
+
+Service --> Controller: StaffDto
+deactivate Service
+Controller --> Cliente: 201 Created (StaffDto)
+@enduml

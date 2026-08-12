@@ -1,0 +1,14 @@
+@startuml
+actor Doctor
+actor Patient
+
+rectangle "Operation Request System" {
+    usecase "Create Operation Request" as UC1
+    usecase "Validate Operation Type" as UC2
+    usecase "Log Request in Medical History" as UC3
+}
+
+Doctor --> UC1 : "Requests to create operation"
+UC1 --> UC2 : "Validates operation type"
+UC1 --> UC3 : "Logs request in patient's medical history"
+@enduml

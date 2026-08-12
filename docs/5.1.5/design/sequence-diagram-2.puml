@@ -1,0 +1,21 @@
+﻿@startuml
+actor Admin
+participant "UserController" as UC
+participant "ISystemUserService" as SUS
+participant "SystemUserRepository" as SUR
+
+Admin -> UC : DeleteUser(username)
+UC -> SUS : DeleteUser(username)
+SUS -> SUR : GetUserByUsernameAsync(username)
+SUR --> SUS : SystemUser
+
+alt User found
+    SUS -> SUR : DeleteUserAsync(user)
+    SUR --> SUS : Confirmation
+    SUS --> UC : (true, "User deleted successfully")
+else User not found
+    SUS --> UC : (false, "User not found")
+end
+
+UC --> Admin : Ok(responseMessage)
+@enduml

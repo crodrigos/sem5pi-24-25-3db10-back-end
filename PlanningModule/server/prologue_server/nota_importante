@@ -1,0 +1,10 @@
+﻿-- Para heuristica one - entre as datas 14 ou 15
+-- Para heuristica two - entre as datas 15 ou 16
+-- Para força bruta - entre as datas 08 ou 09 ou 10 (talvez). tudo de dezembro
+
+
+
+operacoes para força bruta
+or0001 - or0004
+or0005 - or0009
+or0010 - or0014

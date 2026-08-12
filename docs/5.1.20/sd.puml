@@ -1,0 +1,31 @@
+@startuml
+actor Client
+participant "OperationTypeController" as OC
+participant "OperationTypeService" as S
+participant "OperationTypeRepository" as R
+participant "ValidationResult" as VR
+participant "Name" as NS
+participant "Status" as SD
+participant "EstimatedDuration" as ED
+participant "RequiredStaff" as RS
+
+Client -> OC : AddOperationTypeAsync(OperationTypeDTO)
+OC -> S : Add(OperationTypeDTO)
+S -> VR : validateDTO(OperationTypeDTO)
+VR --> S : ValidationResult
+alt Validation Fails
+    S --> OC : 400 Bad Request (Validation Errors)
+    OC --> Client : 400 Bad Request
+else Validation Succeeds
+    S -> NS : new Name(OperationTypeDTO.Name)
+    S -> SD : (Status) OperationTypeDTO.Status
+    S -> ED : new EstimatedDuration(new TimeSpan(0, OperationTypeDTO.EstimatedDuration, 0))
+    S -> R : AddAsync(OperationType)
+    R --> S : OperationType
+    S -> RS : Create RequiredStaff
+    RS -> R : AddAsync(RequiredStaff)
+    R --> S : RequiredStaff
+    S --> OC : OperationTypeDTO
+    OC --> Client : 200 OK (OperationTypeDTO)
+end
+@enduml

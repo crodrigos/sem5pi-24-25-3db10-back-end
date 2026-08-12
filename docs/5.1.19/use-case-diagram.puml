@@ -1,0 +1,23 @@
+@startuml
+actor Doctor
+
+rectangle "Operation Requisition System" {
+    usecase "List/Search Operation Requisitions" as UC1
+    usecase "Filter by Patient Name" as UC2
+    usecase "Filter by Operation Type" as UC3
+    usecase "Filter by Priority" as UC4
+    usecase "Filter by Status" as UC5
+    usecase "View Operation Request Details" as UC6
+    usecase "Edit Operation Request" as UC7
+    usecase "Remove Operation Request" as UC8
+}
+
+Doctor --> UC1 : "Requests to list/search requisitions"
+UC1 --> UC2 : "Filters by Patient Name"
+UC1 --> UC3 : "Filters by Operation Type"
+UC1 --> UC4 : "Filters by Priority"
+UC1 --> UC5 : "Filters by Status"
+UC1 --> UC6 : "Selects an operation request"
+UC6 --> UC7 : "Edits operation request"
+UC6 --> UC8 : "Removes operation request"
+@enduml

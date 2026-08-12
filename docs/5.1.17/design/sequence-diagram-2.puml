@@ -1,0 +1,23 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "IDoctorService" as DS
+participant "OperationRequestRepository" as ORR
+
+Doctor -> ORC : UpdateOperationRequest(dto)
+ORC -> ORS : UpdateOperationRequest(dto)
+ORS -> DS : ValidateDoctorIdentity(dto.doctorId)
+DS --> ORS : isValid
+
+alt Valid Doctor Identity
+    ORS -> ORR : UpdateRequest(dto)
+    ORR --> ORS : Confirmation
+    ORS --> ORC : Ok(responseMessage)
+    ORS -> "Planning Module" : NotifyChanges(dto)
+else Invalid Doctor Identity
+    ORS --> ORC : Error(responseMessage)
+end
+
+ORC --> Doctor : Operation Request Updated
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+actor Patient
+
+rectangle "Patient Management System" {
+    usecase "Self-Register Account" as UC1
+    usecase "Provide Personal Details" as UC2
+    usecase "Validate Email Address" as UC3
+    usecase "Send Verification Email" as UC4
+    usecase "Confirm Registration" as UC5
+    usecase "Access Appointments" as UC6
+}
+
+Patient --> UC1 : "Requests to register"
+UC1 --> UC2 : "Enters personal details"
+UC2 --> UC3 : "Triggers email validation"
+UC3 --> UC4 : "Sends verification email"
+UC4 --> UC5 : "Patient clicks confirmation link"
+UC5 --> UC6 : "Registration confirmed"
+
+note right of UC1
+  Preconditions:
+  - Patient is not already registered.
+  
+  Postconditions:
+  - Patient account is created after verification.
+  - Patient can access appointment features post-registration.
+end note
+
+@enduml

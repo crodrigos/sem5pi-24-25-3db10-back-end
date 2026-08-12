@@ -1,0 +1,10 @@
+﻿@startuml
+actor Cliente
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+
+Cliente -> Controller: PUT /api/staff/{licenseNumber}
+Controller -> Service: UpdateStaffData(criteria, licenseNumber)
+Service --> Controller: StaffDto
+Controller --> Cliente: 200 OK (StaffDto)
+@enduml

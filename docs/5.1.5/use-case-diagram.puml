@@ -1,0 +1,31 @@
+﻿@startuml
+actor Patient
+
+rectangle "Patient Management System" {
+    usecase "Request Account Deletion" as UC1
+    usecase "Validate Deletion Request" as UC2
+    usecase "Remove User Account" as UC3
+    usecase "Schedule Patient Account Deletion" as UC4
+    usecase "Notify Deletion Confirmation" as UC5
+}
+
+Patient --> UC1 : "Requests to delete account"
+UC1 --> UC2 : "Validates deletion request"
+UC2 --> UC3 : "If valid, removes user account"
+UC3 --> UC4 : "Schedules deletion of patient account in 30 days"
+UC4 --> UC5 : "Triggers notification"
+UC5 --> Patient : "Confirms user account removal and scheduled deletion"
+
+note right of UC1
+  Preconditions:
+  - Patient is logged into the system.
+  - Patient has provided necessary identification.
+
+  Postconditions:
+  - User account is removed immediately.
+  - Patient account is scheduled for deletion after 30 days.
+  - Patient receives confirmation of the deletion process.
+end note
+
+@enduml
+

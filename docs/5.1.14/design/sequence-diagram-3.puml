@@ -1,0 +1,34 @@
+﻿@startuml
+actor Client
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+participant "IStaffRepository" as Repository
+participant "Staff" as StaffEntity
+participant "Logger" as Logger
+
+Client -> Controller: DELETE /api/staff/{licenseNumber}
+Controller -> Controller: if (licenseNumber is null)
+Controller --> Client: 400 BadRequest("Invalid license number.")
+Controller -> Service: MarkStaffForDeletion(licenseNumber)
+activate Service
+
+Service -> Repository: FindByLicenseNumber(licenseNumber)
+activate Repository
+
+alt if (staff not found)
+    Repository --> Service: KeyNotFoundException("Staff not found.")
+    Service --> Controller: 404 NotFound("Staff not found.")
+else
+    Repository --> Service: StaffEntity
+    Service -> Logger: Log("Marking staff for deletion...")
+    Service -> StaffEntity: MarkForDeletion()
+    Service -> Repository: Update(staffEntity)
+    Repository --> Service: void
+end
+deactivate Repository
+
+Service --> Controller: void
+deactivate Service
+Controller --> Client: 200 OK (Success Message)
+@enduml
+

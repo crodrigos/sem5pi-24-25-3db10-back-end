@@ -1,0 +1,16 @@
+@startuml
+actor Doctor
+actor Patient
+
+rectangle "Operation Requisition System" {
+    usecase "Update Operation Request" as UC1
+    usecase "Validate Doctor Identity" as UC2
+    usecase "Log Update" as UC3
+    usecase "Notify Planning Module" as UC4
+}
+
+Doctor --> UC1 : "Requests to update operation"
+UC1 --> UC2 : "Validates doctor's identity"
+UC1 --> UC3 : "Logs update in operation request"
+UC1 --> UC4 : "Notifies Planning Module of changes"
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "OperationRequestRepository" as ORR
+participant "ApplicationDbContext" as DbContext
+
+Doctor -> ORC : RemoveOperationRequest(requestId)
+ORC -> ORS : RemoveOperationRequest(requestId)
+ORS -> ORR : ValidateRequestStatus(requestId)
+ORR -> DbContext : FindByIdAsync(requestId)
+DbContext --> ORR : OperationRequest
+
+alt Request can be deleted
+    ORS -> ORR : DeleteRequest(requestId)
+    ORR -> DbContext : Remove(operationRequest)
+    DbContext -> DbContext : SaveChangesAsync()
+    DbContext --> ORR : Confirmation
+    ORR --> ORS : Confirmation
+    ORS --> ORC : Ok(responseMessage)
+    ORS -> "Planning Module" : NotifyRemoval(requestId)
+else Request cannot be deleted
+    ORS --> ORC : Error(responseMessage)
+end
+
+ORC --> Doctor : Operation Request Removed
+@enduml

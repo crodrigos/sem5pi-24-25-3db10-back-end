@@ -1,0 +1,6 @@
+@dddnet8_HostAddress = http://localhost:5257
+
+GET {{dddnet8_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,28 @@
+﻿@startuml
+actor Admin
+
+rectangle "Staff Management System" {
+    usecase "Edit Staff Profile" as UC1
+    usecase "Validate Updated Information" as UC2
+    usecase "Store Updated Information" as UC3
+    usecase "Notify Profile Update" as UC4
+}
+
+Admin --> UC1 : "Requests to edit a staff profile"
+UC1 --> UC2 : "Validates updated data"
+UC2 --> UC3 : "If valid, stores updated information"
+UC3 --> UC4 : "Triggers notification"
+UC4 --> Admin : "Confirms profile update"
+
+note right of UC1
+  Preconditions:
+  - Admin is logged into the system.
+  - Admin has necessary permissions.
+  - Staff profile exists.
+
+  Postconditions:
+  - Staff profile is updated in the system.
+  - Admin receives confirmation of the update.
+end note
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+actor Patient
+
+rectangle "Patient Management System" {
+    usecase "Log In" as UC1
+    usecase "Update Profile Details" as UC2
+    usecase "Verify Sensitive Data Changes" as UC3
+    usecase "Securely Store Changes" as UC4
+    usecase "Log Profile Changes" as UC5
+}
+
+Patient --> UC1 : "Logs into the system"
+UC1 --> UC2 : "Requests to update profile"
+UC2 --> UC3 : "Triggers verification for sensitive data"
+UC3 --> UC4 : "Stores changes securely"
+UC4 --> UC5 : "Logs all changes for audit"
+
+note right of UC1
+  Preconditions:
+  - Patient is registered.
+  
+  Postconditions:
+  - Profile updates are securely saved.
+  - Audit logs are updated with changes.
+end note
+
+@enduml

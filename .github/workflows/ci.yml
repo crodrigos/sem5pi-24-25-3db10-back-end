@@ -1,0 +1,70 @@
+# Continuous Integration (CI) Workflow
+#
+# Resources:
+# - https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+# - https://spacelift.io/blog/github-actions-ansible
+# - https://laurentkempe.com/2023/10/30/publish-dotnet-docker-images-using-dotnet-sdk-and-github-actions/
+# - https://learn.microsoft.com/en-us/dotnet/core/docker/publish-as-container
+# - https://learn.microsoft.com/en-us/dotnet/core/compatibility/containers/8.0/aspnet-port (.NET 7 -> 8, port 80 -> 8080)
+# - https://thedkpatel.medium.com/dockerizing-react-application-built-with-vite-a-simple-guide-4c41eb09defa
+# - https://learn.microsoft.com/en-us/dotnet/devops/dotnet-publish-github-action (so easy! until microsoft makes you pay!!)
+# - https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-8.0
+#   (On Linux, dotnet dev-certs https --trust requires .NET 9 SDK or later. Its distro-dependant in .NET 8)
+
+name: Backend Continuous Integration (CI) Pipeline
+
+on:
+  workflow_dispatch: # Allow manual triggering
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  #schedule:
+  #  - cron: '0 3 * * *' # Every day at 3 am
+
+jobs:
+  ci:
+    name: Build, Test, and Publish Backend Container Image
+    runs-on: ubuntu-latest
+    
+    permissions: # Permissions necessary to publish container to ghcr
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.404
+
+      - name: Restore Dependencies
+        run: dotnet restore sem5pi-24-25-3db10-back-end.sln --runtime linux-x64
+
+      - name: Build
+        run: dotnet build sem5pi-24-25-3db10-back-end.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test sem5pi-24-25-3db10-back-end.sln --configuration Release --no-build --verbosity normal
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Created automatically
+
+      - name: Publish and Push the Container Image
+        run: dotnet publish dddnet8.csproj --runtime linux-x64 --configuration Release
+
+      - name: Trigger CD Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3.0.0
+        with:
+          token: ${{ secrets.PAT }}
+          repository: jpnt/sem5pi-24-25-3db10-deploy
+          event-type: backend-oci-image-published
+

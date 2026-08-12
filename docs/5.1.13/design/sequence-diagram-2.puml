@@ -1,0 +1,28 @@
+﻿@startuml
+actor Cliente
+participant "StaffController" as Controller
+participant "IStaffService" as Service
+participant "IStaffRepository" as Repository
+participant "Staff" as StaffEntity
+
+Cliente -> Controller: PUT /api/staff/{licenseNumber}
+Controller -> Controller: if (licenseNumber is null)
+Controller --> Cliente: 400 BadRequest("License number is required.")
+Controller -> Service: UpdateStaffData(criteria, licenseNumber)
+Service -> Repository: FindByLicenseNumber(licenseNumber)
+activate Repository
+
+alt if (staff not found)
+    Repository --> Service: KeyNotFoundException("Staff not found.")
+    Service --> Controller: 404 NotFound("Staff not found.")
+else
+    Repository --> Service: StaffEntity
+    Service -> StaffEntity: UpdateStaff(criteria)
+    Service -> Repository: Update(staffEntity)
+    Repository --> Service: void
+end
+deactivate Repository
+
+Service --> Controller: StaffDto
+Controller --> Cliente: 200 OK (StaffDto)
+@enduml

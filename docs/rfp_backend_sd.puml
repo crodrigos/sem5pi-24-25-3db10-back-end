@@ -1,0 +1,22 @@
+@startuml
+actor GitHub
+actor "GitHub Actions" as GitHubActions
+actor Ansible
+actor "DEI Deployment Server" as DEI
+actor ".NET Application" as DotNetApp
+
+GitHub -> GitHubActions : Trigger via cron job (3AM)
+GitHubActions -> GitHubActions : Checkout repository
+GitHubActions -> GitHubActions : Restore, Build, and run Tests
+GitHubActions -> GitHubActions : Publish application to container registry
+alt If build is successful
+    GitHubActions -> Ansible : Trigger deployment playbook (rfp_backend.yml)
+    Ansible -> DEI : Install dependencies and enable services (container engine, firewall software, etc)
+    Ansible -> DEI : Configure firewall, user access policies (PAM), and other system settings
+    Ansible -> DEI : Copy built image to DEI server
+    Ansible -> DEI : Run application on DEI server
+    DEI -> DotNetApp : Start .NET application
+else If build fails
+    GitHubActions -> GitHubActions : Report build failure
+end
+@enduml

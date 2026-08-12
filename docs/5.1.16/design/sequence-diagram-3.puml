@@ -1,0 +1,28 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "IOperationTypeService" as OTS
+participant "PatientRepository" as PR
+participant "DoctorRepository" as DR
+participant "ApplicationDbContext" as DbContext
+
+Doctor -> ORC : CreateOperationRequest(dto)
+ORC -> ORS : CreateOperationRequest(dto)
+ORS -> OTS : ValidateOperationType(dto.operationType, dto.doctorId)
+OTS -> DR : GetDoctorByIdAsync(dto.doctorId)
+DR --> OTS : Doctor
+OTS --> ORS : isValid
+
+alt Valid Operation Type
+    ORS -> PR : LogRequestInHistory(dto)
+    PR -> DbContext : Add(operationRequest)
+    DbContext --> PR : Confirmation
+    PR --> ORS : Confirmation
+    ORS --> ORC : Ok(responseMessage)
+else Invalid Operation Type
+    ORS --> ORC : Error(responseMessage)
+end
+
+ORC --> Doctor : Operation Request Submitted
+@enduml

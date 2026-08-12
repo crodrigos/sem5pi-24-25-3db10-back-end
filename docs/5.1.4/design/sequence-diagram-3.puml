@@ -1,0 +1,24 @@
+@startuml
+actor Patient
+participant "UserController" as UC
+participant "IPatientService" as PS
+participant "PatientRepository" as PR
+participant "IEmailService" as ES
+participant "ApplicationDbContext" as DbContext
+
+Patient -> UC : UpdateProfile(dto)
+UC -> PS : UpdateProfile(dto)
+PS -> PR : UpdateAsync(patient)
+PR -> DbContext : Update(patient)
+DbContext --> PR : Confirmation
+PR --> PS : Confirmation
+
+alt Sensitive data changes
+    PS -> ES : SendVerificationEmail(patient)
+    ES -> PR : SendVerificationEmail(patient)
+    PR --> ES : Email sent confirmation
+end
+
+PS --> UC : Ok(responseMessage)
+UC --> Patient : Profile Updated Successfully
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+actor Doctor
+participant "OperationRequestController" as ORC
+participant "IOperationRequestService" as ORS
+participant "OperationRequestRepository" as ORR
+
+
+Doctor -> ORC : RemoveOperationRequest(requestId)
+ORC -> ORS : RemoveOperationRequest(requestId)
+ORS -> ORR : ValidateRequestStatus(requestId)
+
+alt Request can be deleted
+    ORS -> ORR : DeleteRequest(requestId)
+    ORR --> ORS : Confirmation
+    ORS --> ORC : Ok(responseMessage)
+    ORS -> "Planning Module" : NotifyRemoval(requestId)
+else Request cannot be deleted
+    ORS --> ORC : Error(responseMessage)
+end
+
+ORC --> Doctor : Operation Request Removed
+@enduml

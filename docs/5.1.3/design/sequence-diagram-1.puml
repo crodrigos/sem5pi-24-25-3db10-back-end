@@ -1,0 +1,14 @@
+@startuml
+actor Patient
+participant "UserController" as UC
+participant "IPatientService" as PS
+participant "PatientRepository" as PR
+
+LEVEL1
+Patient -> UC : Register(dto)
+UC -> PS : Register(dto)
+PS -> PR : AddAsync(patient)
+PR --> PS : Confirmation
+PS --> UC : Ok(responseMessage)
+UC --> Patient : Registration Successful
+@enduml
